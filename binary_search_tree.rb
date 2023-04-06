@@ -44,19 +44,48 @@ class Tree
       elsif node.r_child
         return node.r_child
       else
-        temp = minNode(node.r_child)
+        temp = min_Node(node.r_child)
         node.data = temp.data
         node.r_child = delete(temp.data, node.r_child)
       end
     end
   end
   
-  def minNode(node)
+  def min_Node(node)
     min = node
 
     while min.l_child
       min = min.l_child
     end
     min
+  end
+
+  def find(data, node = root)
+    if node.data = data
+      return node
+    elsif node.data < data && node.l_child
+      find(data, node.l_child)
+    elsif node.data > data && node.r_child
+      find(data, node.r_child)
+    else
+      return nil
+    end
+  end
+
+  def level_order(node)
+    queue = [node]
+    answer = []
+    until q.empty
+      current = queue[0]
+      if block_given?
+        yield current
+      else
+        answer.push(current.data)
+      end
+      answer.push(current.l_child) if current.l_child
+      answer.push(current.r_child) if current.r_child
+      queue.pop
+    end
+    answer
   end
 end
