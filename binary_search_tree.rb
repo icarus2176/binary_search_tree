@@ -72,13 +72,13 @@ class Tree
     end
   end
 
-  def level_order(node)
-    queue = [node]
-    answer = []
-    until q.empty
+  def level_order()
+    queue = [@root]
+    answer = [] unless block_given?
+    until queue.empty
       current = queue[0]
-      if block_given?
-        yield current
+      if block_given? 
+        yield current 
       else
         answer.push(current.data)
       end
@@ -86,6 +86,44 @@ class Tree
       answer.push(current.r_child) if current.r_child
       queue.pop
     end
+    answer
+  end
+
+  def inorder(node = @root)
+    answer = [] unless block_given?
+    inorder(node.l_child) if node.l_child
+    if block_given?
+      yield node
+    else
+      answer.push(node.data)
+    end
+    inorder(node.r_child) if node.r_child
+    answer if answer
+  end
+
+  def preorder(node = @root)
+    answer = [] unless block_given?
+    if block_given?
+      yield node 
+    else
+      answer.push(node.data)
+    end
+
+    preorder(node.l_child) if node.l_child
+    preorder(node.r_child) if node.r_child
+    answer
+  end
+
+  def postorder(node = @root)
+    answer = [] unless block_given?
+    if block_given?
+      yield node 
+    else
+      answer.push(node.data)
+    end
+
+    preorder(node.l_child) if node.l_child
+    preorder(node.r_child) if node.r_child
     answer
   end
 end
