@@ -147,4 +147,21 @@ class Tree
     end
     depth
   end
+
+  def balanced?
+    nodes = preorder
+    leaf_heights = []
+    nodes.foreach do |node| 
+      leaf_heights.push(node.height) unless node.l_child || node.r_child 
+    end
+    if leaf_heights.max - leaf_heights.min > 1
+      true
+    else
+      false
+    end
+  end
+
+  def rebalance
+    nodes = preorder
+    @root = build_tree(nodes)
 end
