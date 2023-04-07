@@ -74,7 +74,7 @@ class Tree
 
   def level_order()
     queue = [@root]
-    answer = [] unless block_given?
+    answer = []
     until queue.empty
       current = queue[0]
       if block_given? 
@@ -82,48 +82,69 @@ class Tree
       else
         answer.push(current.data)
       end
-      answer.push(current.l_child) if current.l_child
-      answer.push(current.r_child) if current.r_child
+      queue.push(current.l_child) if current.l_child
+      queue.push(current.r_child) if current.r_child
       queue.pop
     end
-    answer
+    answer if answer
   end
 
   def inorder(node = @root)
     answer = [] unless block_given?
-    inorder(node.l_child) if node.l_child
+    answer.push(inorder(node.l_child)) if node.l_child
     if block_given?
       yield node
     else
       answer.push(node.data)
     end
-    inorder(node.r_child) if node.r_child
+    answer.push(inorder(node.r_child)) if node.r_child
     answer if answer
   end
 
   def preorder(node = @root)
-    answer = [] unless block_given?
+    answer = []
     if block_given?
       yield node 
     else
       answer.push(node.data)
     end
 
-    preorder(node.l_child) if node.l_child
-    preorder(node.r_child) if node.r_child
-    answer
+    answer.push(preorder(node.l_child))if node.l_child
+    answer.push(preorder(node.r_child)) if node.r_child
+    answer if answer
   end
 
   def postorder(node = @root)
-    answer = [] unless block_given?
+    answer = []
     if block_given?
       yield node 
     else
       answer.push(node.data)
     end
 
-    preorder(node.l_child) if node.l_child
-    preorder(node.r_child) if node.r_child
-    answer
+    answer.push(preorder(node.l_child)) if node.l_child
+    answer.push(preorder(node.r_child)) if node.r_child
+    answer if answer
+  end
+
+  def height(node)
+    heights = []
+
+    heights.push(height(node.l_child)) if node.l_child
+    heights.push(height(node.r_child)) if node.r_child
+
+    heights.max
+  end
+
+  def depth(node)
+    until node.data == current.data
+      if node.data < current.l_child.data
+        current = current.l_child
+      else
+        current = current.r_child
+      end
+      depth += 1
+    end
+    depth
   end
 end
